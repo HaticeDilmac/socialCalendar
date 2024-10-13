@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../model/friends.dart';
+
 class AddFriendScreen extends StatefulWidget {
   final Function onSave;
+  final Friend? existingFriend; // Accepts an existing Friend model for editing
 
-  AddFriendScreen({required this.onSave});
+  AddFriendScreen({
+    required this.onSave,
+    this.existingFriend,
+  });
 
   @override
   _AddFriendScreenState createState() => _AddFriendScreenState();
@@ -12,10 +18,22 @@ class AddFriendScreen extends StatefulWidget {
 class _AddFriendScreenState extends State<AddFriendScreen> {
   String name = '';
   DateTime? birthday;
-  List<Map<String, dynamic>> importantDates = [];
-  List<Map<String, dynamic>> interactionLog = [];
+  List<ImportantDate> importantDates = [];
+  List<InteractionLog> interactionLog = [];
 
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.existingFriend != null) {
+      // Initialize fields with existing friend data
+      name = widget.existingFriend!.name;
+      birthday = widget.existingFriend!.birthday;
+      importantDates = widget.existingFriend!.importantDates;
+      interactionLog = widget.existingFriend!.interactionLog;
+    }
+  }
 
   void _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -66,7 +84,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
               onPressed: () {
                 if (date != null) {
                   setState(() {
-                    importantDates.add({'title': title, 'date': date!.toIso8601String()});
+                    importantDates.add(ImportantDate(title: title, date: date!));
                   });
                   Navigator.of(context).pop();
                 }
@@ -114,7 +132,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
               onPressed: () {
                 if (date != null) {
                   setState(() {
-                    interactionLog.add({'type': type, 'date': date!.toIso8601String()});
+                    interactionLog.add(InteractionLog(type: type, date: date!));
                   });
                   Navigator.of(context).pop();
                 }
@@ -130,12 +148,16 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       if (birthday != null) {
-        widget.onSave(
-          name,
-          birthday!,
-          importantDates,
-          interactionLog,
+        // Create a new Friend object
+        Friend newFriend = Friend(
+          id: widget.existingFriend?.id ?? DateTime.now().toString(),
+          name: name,
+          birthday: birthday!,
+          importantDates: importantDates,
+          interactionLog: interactionLog,
         );
+
+        widget.onSave(newFriend); // Pass the entire Friend object
         Navigator.of(context).pop();
       }
     }
@@ -164,6 +186,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
                 onChanged: (value) {
                   name = value;
                 },
+                initialValue: name, // Set initial value for editing
               ),
               const SizedBox(height: 16),
               Row(
