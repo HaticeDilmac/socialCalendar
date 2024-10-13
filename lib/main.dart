@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'dart:async';
 
 import 'package:social_calendar/pages/friendsManager.dart';
 
-void main() {
+void main()async {
+    // Yerel ayarları yükle
+  await initializeDateFormatting('tr_TR', null);
   runApp(const MyApp());
 }
 
