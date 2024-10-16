@@ -4,8 +4,8 @@ import 'dart:async';
 
 import 'package:social_calendar/pages/friendsManager.dart';
 
-void main()async {
-    // Yerel ayarları yükle
+void main() async {
+  // Yerel ayarları yükle
   await initializeDateFormatting('tr_TR', null);
   runApp(const MyApp());
 }
@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Timer(const Duration(seconds: 3), () {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => FriendListScreen(),
+        builder: (context) => const FriendListScreen(),
       ));
     });
   }

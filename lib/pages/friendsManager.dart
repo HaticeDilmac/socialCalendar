@@ -105,7 +105,7 @@ class _FriendListScreenState extends State<FriendListScreen> {
     DateTime currentDate = DateTime.now();
     var outputFormat = DateFormat('d MMMM yyyy', 'tr_TR');
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 231, 226, 226),
+      backgroundColor: const Color.fromARGB(255, 237, 237, 237),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -113,7 +113,7 @@ class _FriendListScreenState extends State<FriendListScreen> {
             const Padding(
               padding: EdgeInsets.only(top: 20, left: 20, right: 20),
               child: Text(
-                'Social Calendar',
+                'Social Calendar', //Social Calendar Title Text Widget
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -121,13 +121,13 @@ class _FriendListScreenState extends State<FriendListScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
               child: Text(
                 outputFormat.format(currentDate),
                 style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
-                    fontSize: 14),
+                    fontSize: 12),
               ),
             ),
             _currentIndex == 0
@@ -136,47 +136,53 @@ class _FriendListScreenState extends State<FriendListScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 8.0,
-        child: SizedBox(
-          height: 60,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              TextButton(
-                onPressed: () => _onItemTapped(0),
-                child: const Text(
-                  'Friends List',
-                  style: TextStyle(fontSize: 16, color: Colors.black),
-                ),
+      bottomNavigationBar: _navigationBarWidget(context),
+    );
+  }
+
+  BottomAppBar _navigationBarWidget(BuildContext context) {
+    return BottomAppBar(
+      //navigationBar widget
+      color: Colors.white,
+      shape: const CircularNotchedRectangle(),
+      notchMargin: 8.0,
+      child: SizedBox(
+        height: 60,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            TextButton(
+              onPressed: () => _onItemTapped(0),
+              child: const Text(
+                'Friends List',
+                style: TextStyle(fontSize: 16, color: Colors.black),
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black, // Buton arkaplanı siyah
-                  minimumSize: const Size(130, 60), // Buton boyutu
-                ),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const AddFriendScreen(),
-                    ),
-                  );
-                },
-                child: const Text(
-                  '+',
-                  style: TextStyle(fontSize: 30, color: Colors.white),
-                ),
-              ), // Boşluk bırakmak için
-              TextButton(
-                onPressed: () => _onItemTapped(1),
-                child: const Text(
-                  'Social Calendar',
-                  style: TextStyle(fontSize: 16, color: Colors.black),
-                ),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                minimumSize: const Size(130, 60),
               ),
-            ],
-          ),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const AddFriendScreen(),
+                  ),
+                );
+              },
+              child: const Text(
+                '+',
+                style: TextStyle(fontSize: 30, color: Colors.white),
+              ),
+            ),
+            TextButton(
+              onPressed: () => _onItemTapped(1),
+              child: const Text(
+                'Social Calendar',
+                style: TextStyle(fontSize: 16, color: Colors.black),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -190,7 +196,7 @@ class _FriendListScreenState extends State<FriendListScreen> {
         itemBuilder: (context, index) {
           final friend = friends[index];
           bool isExpanded = isExpandedMap[index] ??
-              false; // Her bir arkadaş için genişletme durumu
+              false; // container widgets for detail information
           bool hasBirthDay = (friend.birthday.month < currentDate.month) ||
               (friend.birthday.month == currentDate.month &&
                   friend.birthday.day < currentDate.day);
@@ -198,9 +204,8 @@ class _FriendListScreenState extends State<FriendListScreen> {
           var formattedDate = outputFormat.format(friend.birthday);
           return Dismissible(
             key: Key(friend.id.toString()),
-            background: _editBackground(), // Sola sürükleme arka planı
-            secondaryBackground:
-                _deleteBackground(), // Sağa sürükleme arka planı
+            background: _editBackground(), // left update
+            secondaryBackground: _deleteBackground(), // right delete
             confirmDismiss: (direction) async {
               if (direction == DismissDirection.endToStart) {
                 return await _showDeleteConfirmationDialog(context, friend.id);
@@ -208,7 +213,7 @@ class _FriendListScreenState extends State<FriendListScreen> {
                 return Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => AddFriendScreen(
-                      existingFriend: friend, // Arkadaş bilgisini gönderiyoruz
+                      existingFriend: friend, // Friends information send
                     ),
                   ),
                 );
@@ -220,8 +225,8 @@ class _FriendListScreenState extends State<FriendListScreen> {
             child: GestureDetector(
               onTap: () {
                 setState(() {
-                  isExpandedMap[index] = !isExpandedMap[
-                      index]!; // Tıklanınca genişletme durumunu değiştir
+                  isExpandedMap[index] =
+                      !isExpandedMap[index]!; // onTap visible control function
                 });
               },
               child: Container(
@@ -239,7 +244,7 @@ class _FriendListScreenState extends State<FriendListScreen> {
                         hasBirthDay: hasBirthDay,
                         friend: friend,
                         formattedDate: formattedDate),
-                    // Eğer isExpanded true ise, önemli tarihler ve etkileşim günlüğünü gösteriyoruz
+                    //if isExpanded value true , important date show(visible)
                     if (isExpanded) ...[
                       // Important Dates List
                       const SizedBox(height: 10),
@@ -315,8 +320,8 @@ class _FriendListScreenState extends State<FriendListScreen> {
           ),
         ),
         if (selectedDate != null) ...[
-          Container(
-            height: 150, // İsteğe bağlı yükseklik
+          SizedBox(
+            height: 150,
             child: _buildEventList(selectedDate!),
           ),
         ],
@@ -338,31 +343,16 @@ class _FriendListScreenState extends State<FriendListScreen> {
       itemCount: events.length,
       itemBuilder: (context, index) {
         final event = events[index];
-        return Card(
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25), color: Colors.white),
           child: ListTile(
             title: Text(event.subject),
             subtitle: Text(
-                'Doğum günü: ${event.startTime.day}/${event.startTime.month}'),
+                'Birthday: ${event.startTime.day}/${event.startTime.month}'),
           ),
-        );
-      },
-    );
-  }
-
-  void _showAppointmentDetails(BuildContext context, Appointment appointment) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(appointment.subject),
-          content: Text(
-              'Doğum günü: ${appointment.startTime.day}/${appointment.startTime.month}'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Kapat'),
-            ),
-          ],
         );
       },
     );
