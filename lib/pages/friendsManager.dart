@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+import '../widget/title_widget.dart';
 import 'addFriends.dart';
 import '../model/friends.dart';
 
@@ -291,19 +292,79 @@ class _FriendListScreenState extends State<FriendListScreen> {
     );
   }
 
+  DateTime? selectedDate;
+
   Widget _calendarBuilderMethod() {
-    return Container(
-      height: 400,
-      child: SfCalendar(
-        view: CalendarView.month,
-        monthViewSettings: const MonthViewSettings(
-          appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,
+    return Column(
+      children: [
+        SizedBox(
+          height: 400,
+          child: SfCalendar(
+            view: CalendarView.month,
+            monthViewSettings: const MonthViewSettings(
+              appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,
+            ),
+            dataSource: MeetingDataSource(getBirthdayAppointments()),
+            onTap: (CalendarTapDetails details) {
+              if (details.targetElement == CalendarElement.calendarCell) {
+                setState(() {
+                  selectedDate = details.date;
+                });
+              }
+            },
+          ),
         ),
-        dataSource: MeetingDataSource(getBirthdayAppointments()),
-        onTap: (CalendarTapDetails details) {
-          // İsterseniz takvim tıklamaları için burada işlem yapabilirsiniz.
-        },
-      ),
+        if (selectedDate != null) ...[
+          Container(
+            height: 150, // İsteğe bağlı yükseklik
+            child: _buildEventList(selectedDate!),
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildEventList(DateTime date) {
+    final events = getBirthdayAppointments()
+        .where(
+          (appt) =>
+              appt.startTime.year == date.year &&
+              appt.startTime.month == date.month &&
+              appt.startTime.day == date.day,
+        )
+        .toList();
+
+    return ListView.builder(
+      itemCount: events.length,
+      itemBuilder: (context, index) {
+        final event = events[index];
+        return Card(
+          child: ListTile(
+            title: Text(event.subject),
+            subtitle: Text(
+                'Doğum günü: ${event.startTime.day}/${event.startTime.month}'),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showAppointmentDetails(BuildContext context, Appointment appointment) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(appointment.subject),
+          content: Text(
+              'Doğum günü: ${appointment.startTime.day}/${appointment.startTime.month}'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Kapat'),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -329,7 +390,6 @@ class _FriendListScreenState extends State<FriendListScreen> {
     return appointments;
   }
 
-  // Sola sürükleme sırasında gösterilecek düzenleme ikonu arka planı
   Widget _editBackground() {
     return Container(
       color: Colors.black,
@@ -347,7 +407,7 @@ class _FriendListScreenState extends State<FriendListScreen> {
       context: context,
       builder: (context) {
         return CupertinoAlertDialog(
-          title: const Text('Silmek istediğinize emin misiniz?'),
+          title: const Text('Are you sure you want to delete??'),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
@@ -390,73 +450,6 @@ class _FriendListScreenState extends State<FriendListScreen> {
       alignment: Alignment.centerRight,
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: const Icon(Icons.delete, color: Colors.white),
-    );
-  }
-}
-
-class TitleWidget extends StatelessWidget {
-  const TitleWidget({
-    super.key,
-    required this.hasBirthDay,
-    required this.friend,
-    required this.formattedDate,
-  });
-
-  final bool hasBirthDay;
-  final Friend friend;
-  final String formattedDate;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          //Icon Container widget
-          height: 30,
-          width: 30,
-          decoration: BoxDecoration(
-              color: hasBirthDay ? Colors.red : Colors.green,
-              borderRadius: BorderRadius.circular(20)),
-          child: const Icon(Icons.grade),
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              friend.name,
-              style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  letterSpacing: 0,
-                  fontWeight: FontWeight.bold),
-            ),
-            Row(
-              children: [
-                Text('$formattedDate\t-\t',
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 13,
-                      letterSpacing: 0,
-                    )),
-                Text(
-                    (hasBirthDay == true)
-                        ? 'BirthDay completed'
-                        : 'BirthDay not completed',
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 12,
-                      letterSpacing: 0,
-                    )),
-              ],
-            )
-          ],
-        ),
-        const Spacer(),
-        const Icon(Icons.today)
-      ],
     );
   }
 }
