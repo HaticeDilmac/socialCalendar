@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -421,13 +422,17 @@ class _FriendListScreenState extends State<FriendListScreen> {
 
     if (response.statusCode == 204) {
       // delete state successful
+      // ignore: use_build_context_synchronously
       Navigator.of(dialogContext).pop(); // Alert'i kapat
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const FriendListScreen()),
       );
     } else {
+      // ignore: use_build_context_synchronously
       Navigator.of(dialogContext).pop();
       // erorr state send erorr message
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Failed to delete friend.')),
       );

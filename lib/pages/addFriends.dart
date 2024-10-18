@@ -1,5 +1,3 @@
-// import 'dart:convert';
-
 // import 'package:flutter/cupertino.dart';
 // import 'package:flutter/foundation.dart';
 // import 'package:flutter/material.dart';
@@ -446,6 +444,7 @@ class AddFriendScreen extends StatefulWidget {
   const AddFriendScreen({super.key, this.existingFriend});
 
   @override
+  // ignore: library_private_types_in_public_api
   _AddFriendScreenState createState() => _AddFriendScreenState();
 }
 
@@ -478,6 +477,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
     );
 
     if (response.statusCode == 201) {
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const FriendListScreen()),
       );
@@ -516,6 +516,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
     );
 
     if (response.statusCode == 200) {
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const FriendListScreen()),
       );
