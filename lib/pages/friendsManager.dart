@@ -1,4 +1,5 @@
 // ignore: file_names
+// ignore: file_names
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -219,6 +220,7 @@ class _FriendListScreenState extends State<FriendListScreen> {
                   ),
                 );
               }
+              return null;
             },
             onDismissed: (direction) {
               deleteFriend(index);
