@@ -55,7 +55,8 @@ class _FriendListScreenState extends State<FriendListScreen> {
       });
     } else {
       if (kDebugMode) {
-        print('Error');
+        print(response.statusCode);
+         print(response.body);
       }
     }
   }
