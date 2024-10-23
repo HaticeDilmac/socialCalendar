@@ -105,7 +105,8 @@ class _FriendListScreenState extends State<FriendListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime currentDate = DateTime.now();
+    DateTime currentDate = DateTime.now().toLocal(); 
+
     var outputFormat = DateFormat('d MMMM yyyy', 'tr_TR');
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 237, 237, 237),

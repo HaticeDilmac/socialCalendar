@@ -123,7 +123,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
     );
     if (picked != null) {
       setState(() {
-        birthday = picked;
+        birthday = DateTime.utc(picked.year, picked.month, picked.day);
       });
     }
   }
@@ -283,6 +283,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
                     ? 'Birthday: ${DateFormat('d MMMM yyyy').format(birthday!.toLocal())}'
                     : '',
               ),
+
               const SizedBox(height: 10),
 
               // Important Dates List
