@@ -6,7 +6,7 @@ Social Calendar is a mobile application that allows users to track their friends
 
 ## Features
 
-- **CFriends List**: Users can save, update, and delete their friends' information.
+- **Friends List**: Users can save, update, and delete their friends' information.
 - **Important Date Tracking**: Users can add and track important dates like birthdays for each friend.
 - **Interaction Log**: Users can log interactions with friends (meetings, messages, etc.) and review past interactions.
 - **Calendar View**: Users can view their friends' birthdays on a calendar and check events related to specific dates by tapping on them.
@@ -27,8 +27,10 @@ Social Calendar is a mobile application that allows users to track their friends
 The application allows users to easily manage their friends' lists. Users can add their friends' birthdays and other important dates and view this information on a calendar. Additionally, they can log interaction histories and plan their social lives more effectively without forgetting important days.
 
 # Screenshots
-<img width="311" alt="calculator" src="https://github.com/user-attachments/assets/f44cff6d-85c7-402e-b014-7fd6e8eec4e8">   
-
+<img width="311" alt="calculator" src="https://github.com/user-attachments/assets/1768e35c-3966-43b6-98af-48801b62dac3">   
+<img width="311" alt="calculator" src="https://github.com/user-attachments/assets/e7fff7ca-615a-4b77-abb9-c0acde1fca65">   
+<img width="311" alt="calculator" src="https://github.com/user-attachments/assets/5273d9d3-6883-4aa4-b291-ddbea2fde043">   
+<img width="311" alt="calculator" src="https://github.com/user-attachments/assets/f5a8fb6b-5485-4ce9-ad52-8a4cf2238238">      
 
 ## Installation
 
