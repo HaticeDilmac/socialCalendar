@@ -17,10 +17,6 @@ Social Calendar is a mobile application that allows users to track their friends
 - Frontend: Flutter
 - Backend: Node.js
 - Veritabanı: MongoDB
-- Frontend: Flutter
-- Backend: Node.js
-- Database: MongoDB
-
 
 ## Usage
 
